@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('emprendedores', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->string('telefono');
+            $table->string('rubro');
             $table->timestamps();
         });
     }

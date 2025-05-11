@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('ferias', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->date('fecha_evento');
+            $table->string('lugar');
+            $table->text('descripcion')->nullable();
             $table->timestamps();
         });
     }
