@@ -3,8 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class feria extends Model
+class Feria extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = ['nombre', 'fecha_evento', 'lugar', 'descripcion'];
+
+    public function emprendedores()
+    {
+        return $this->belongsToMany(Emprendedor::class);
+    }
 }
