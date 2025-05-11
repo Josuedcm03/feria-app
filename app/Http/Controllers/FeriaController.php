@@ -11,7 +11,8 @@ class FeriaController extends Controller
      */
     public function index()
     {
-        //
+        $ferias = Feria::all();
+        return view('ferias.index', compact('ferias'));
     }
 
     /**
@@ -19,7 +20,7 @@ class FeriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('ferias.create');
     }
 
     /**
@@ -27,38 +28,41 @@ class FeriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Feria::create($request->all());
+        return redirect()->route('ferias.index')->with('success', 'Feria registrada exitosamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Feria $feria)
     {
-        //
+        return view('ferias.show', compact('feria'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Feria $feria)
     {
-        //
+        return view('ferias.edit', compact('feria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Feria $feria)
     {
-        //
+        $feria->update($request->all());
+        return redirect()->route('ferias.index')->with('success', 'Feria actualizada correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Feria $feria)
     {
-        //
+        $feria->delete();
+        return redirect()->route('ferias.index')->with('success', 'Feria eliminada.');
     }
 }

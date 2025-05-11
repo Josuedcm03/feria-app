@@ -11,7 +11,8 @@ class EmprendedorController extends Controller
      */
     public function index()
     {
-        //
+        $emprendedores = Emprendedor::all();
+        return view('emprendedores.index', compact('emprendedores'));
     }
 
     /**
@@ -19,7 +20,7 @@ class EmprendedorController extends Controller
      */
     public function create()
     {
-        //
+        return view('emprendedores.create');
     }
 
     /**
@@ -27,38 +28,41 @@ class EmprendedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Emprendedor::create($request->all());
+        return redirect()->route('emprendedores.index')->with('success', 'Emprendedor creado exitosamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Emprendedor $emprendedor)
     {
-        //
+        return view('emprendedores.show', compact('emprendedor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Emprendedor $emprendedor)
     {
-        //
+        return view('emprendedores.edit', compact('emprendedor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Emprendedor $emprendedor)
     {
-        //
+        $emprendedor->update($request->all());
+        return redirect()->route('emprendedores.index')->with('success', 'Emprendedor actualizado.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Emprendedor $emprendedor)
     {
-        //
+        $emprendedor->delete();
+        return redirect()->route('emprendedores.index')->with('success', 'Emprendedor eliminado.');
     }
 }
