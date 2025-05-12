@@ -14,15 +14,16 @@
         {{ __('Dashboard') }}
     </x-nav-link>
 
-    <x-nav-link :href="route('ferias.index')" :active="request()->routeIs('ferias.*')">
-        {{ __('Ferias') }}
-    </x-nav-link>
+                    <x-nav-link>
+                        <!-- Enlace al index -->
+            <div class="mt-6">
+                <a href="{{ route('emprendedores.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    {{ __('Ver Emprendedores') }}
+                </a>
+            </div>
+                    </x-nav-link>
 
-    <x-nav-link :href="route('emprendedores.index')" :active="request()->routeIs('emprendedores.*')">
-        {{ __('Emprendedores') }}
-    </x-nav-link>
-</div>
-
+                </div>
             </div>
 
             <!-- Right Section: User Dropdown -->
@@ -44,7 +45,10 @@
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -94,7 +98,10 @@
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+
+                    <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
