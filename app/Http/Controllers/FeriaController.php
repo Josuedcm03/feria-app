@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Feria;
+use App\Models\Emprendedor;
+use Illuminate\Http\Request;
 
 class FeriaController extends Controller
 {
@@ -12,7 +13,7 @@ class FeriaController extends Controller
      */
     public function index()
     {
-        $ferias = Feria::all();
+        $ferias = Feria::orderBy('fecha_evento', 'desc')->get();
         return view('ferias.index', compact('ferias'));
     }
 
@@ -21,7 +22,9 @@ class FeriaController extends Controller
      */
     public function create()
     {
-        return view('ferias.create');
+        // Para UC3: enviamos lista de emprendedores disponibles
+        $emprendedores = Emprendedor::all();
+        return view('ferias.create', compact('emprendedores'));
     }
 
     /**
@@ -29,23 +32,29 @@ class FeriaController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación RF: campos obligatorios y formatos
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'fecha_evento' => 'required|date|after_or_equal:today',
-            'lugar' => 'required|string|max:255',
-            'descripcion' => 'required|string|max:1000',
+            'nombre'         => 'required|string|max:255',
+            'fecha_evento'   => 'required|date|after_or_equal:today',
+            'lugar'          => 'required|string|max:255',
+            'descripcion'    => 'required|string|max:1000',
+            'emprendedores'  => 'array',
+            'emprendedores.*'=> 'exists:emprendedores,id',
         ], [
-            'nombre.required' => 'El campo Nombre es requerido.',
-            'fecha_evento.required' => 'La Fecha del evento es requerida.',
-            'fecha_evento.date' => 'La Fecha debe ser válida.',
-            'fecha_evento.after_or_equal' => 'La Fecha no puede ser anterior a hoy.',
-            'lugar.required' => 'El campo Lugar es requerido.',
-            'descripcion.required' => 'El campo Descripción es requerido.',
+            'fecha_evento.after_or_equal' => 'La fecha no puede ser anterior a hoy.',
         ]);
-        
-        Feria::create($validated);
-        
-        return redirect()->route('ferias.index')->with('success', 'Feria registrada exitosamente.');
+
+        // Crear feria
+        $feria = Feria::create($validated);
+
+        // UC3: vincular emprendedores seleccionados (si los hay)
+        if (!empty($validated['emprendedores'])) {
+            $feria->emprendedores()->attach($validated['emprendedores']);
+        }
+
+        return redirect()
+            ->route('ferias.index')
+            ->with('success', 'Feria registrada exitosamente.');
     }
 
     /**
@@ -53,7 +62,9 @@ class FeriaController extends Controller
      */
     public function show(Feria $feria)
     {
-        return view('ferias.show', compact('feria'));
+        // UC4: pasar lista de emprendedores vinculados
+        $participantes = $feria->emprendedores;
+        return view('ferias.show', compact('feria', 'participantes'));
     }
 
     /**
@@ -61,7 +72,11 @@ class FeriaController extends Controller
      */
     public function edit(Feria $feria)
     {
-        return view('ferias.edit', compact('feria'));
+        // Para editar vínculos: lista completa + seleccionados
+        $emprendedores       = Emprendedor::all();
+        $seleccionados       = $feria->emprendedores->pluck('id')->toArray();
+
+        return view('ferias.edit', compact('feria', 'emprendedores', 'seleccionados'));
     }
 
     /**
@@ -69,8 +84,25 @@ class FeriaController extends Controller
      */
     public function update(Request $request, Feria $feria)
     {
-        $feria->update($request->all());
-        return redirect()->route('ferias.index')->with('success', 'Feria actualizada correctamente.');
+        // Validación similar a store
+        $validated = $request->validate([
+            'nombre'         => 'required|string|max:255',
+            'fecha_evento'   => 'required|date|after_or_equal:today',
+            'lugar'          => 'required|string|max:255',
+            'descripcion'    => 'required|string|max:1000',
+            'emprendedores'  => 'array',
+            'emprendedores.*'=> 'exists:emprendedores,id',
+        ]);
+
+        // Actualizar datos de la feria
+        $feria->update($validated);
+
+        // UC3: sincronizar vínculos (añade y quita según selección)
+        $feria->emprendedores()->sync($validated['emprendedores'] ?? []);
+
+        return redirect()
+            ->route('ferias.index')
+            ->with('success', 'Feria actualizada correctamente.');
     }
 
     /**
@@ -78,7 +110,13 @@ class FeriaController extends Controller
      */
     public function destroy(Feria $feria)
     {
+        // Al eliminar, también se quitan registros en la pivote por cascada defini­
+        // da en la migración/relación, o bien:
+        // $feria->emprendedores()->detach();
         $feria->delete();
-        return redirect()->route('ferias.index')->with('success', 'Feria eliminada.');
+
+        return redirect()
+            ->route('ferias.index')
+            ->with('success', 'Feria eliminada.');
     }
 }

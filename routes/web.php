@@ -19,7 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('ferias', FeriaController::class);
-Route::resource('emprendedores', EmprendedorController::class);
+Route::resource('ferias', FeriaController::class)->middleware(['auth','verified']);
+Route::resource('emprendedores', EmprendedorController::class)->middleware(['auth','verified']);
+
+Route::resource('ferias', FeriaController::class)->middleware(['auth','verified']);
 
 require __DIR__.'/auth.php';
