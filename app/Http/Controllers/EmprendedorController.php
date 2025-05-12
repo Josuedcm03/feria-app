@@ -28,8 +28,19 @@ class EmprendedorController extends Controller
      */
     public function store(Request $request)
     {
-        Emprendedor::create($request->all());
-        return redirect()->route('emprendedores.index')->with('success', 'Emprendedor creado exitosamente.');
+         // Valida
+        $validated = $request->validate([
+            'nombre'   => 'required|string|max:255',
+            'telefono' => 'required|numeric',
+            'rubro'    => 'required|string|max:255',
+        ]);
+
+        // Crea 
+        Emprendedor::create($validated);
+
+        return redirect()
+            ->route('emprendedores.index')
+            ->with('success', 'Emprendedor creado exitosamente.');
     }
 
     /**
