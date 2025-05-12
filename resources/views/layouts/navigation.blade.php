@@ -15,6 +15,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link>
+                        <!-- Enlace al index -->
+            <div class="mt-6">
+                <a href="{{ route('emprendedores.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    {{ __('Ver Emprendedores') }}
+                </a>
+            </div>
+                    </x-nav-link>
+
                 </div>
             </div>
 
