@@ -1,0 +1,31 @@
+@startuml entidadRelacion
+
+!define table(x) entity x
+
+' Definición de tablas
+table(Feria) {
+  +id : int <<PK>>
+  nombre : varchar
+  fecha : date
+  lugar : varchar
+  descripcion : text
+}
+
+table(Emprendedor) {
+  +id : int <<PK>>
+  nombre : varchar
+  telefono : varchar
+  rubro : varchar
+}
+
+table(Feria_Emprendedor) {
+  +id : int <<PK>>
+  feria_id : int <<FK>>
+  emprendedor_id : int <<FK>>
+}
+
+' Relaciones
+Feria ||--o{ Feria_Emprendedor : "tiene"
+Emprendedor ||--o{ Feria_Emprendedor : "asiste_a"
+
+@enduml
