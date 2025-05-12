@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feria;
+use App\Models\Emprendedor;
 
 class FeriaController extends Controller
 {
@@ -15,6 +16,39 @@ class FeriaController extends Controller
         $ferias = Feria::all();
         return view('ferias.index', compact('ferias'));
     }
+
+    public function gestionar()
+    {
+    $ferias = Feria::with('emprendedores')->get(); // eager loading
+    return view('ferias.gestionar', compact('ferias'));
+    }
+
+    public function asignar(Feria $feria)
+    {
+    $todos = Emprendedor::all();
+    $asignados = $feria->emprendedores->pluck('id')->toArray();
+    
+    return view('ferias.asignar', compact('feria', 'todos', 'asignados'));
+    }
+
+    public function vincularEmprendedor(Request $request, Feria $feria)
+    {
+    $request->validate([
+        'emprendedor_id' => 'required|exists:emprendedores,id'
+    ]);
+
+    $feria->emprendedores()->attach($request->emprendedor_id);
+
+    return redirect()->back()->with('success', 'Emprendedor asignado con éxito.');
+    }
+
+public function desvincularEmprendedor(Feria $feria, $emprendedor_id)
+    {
+    $feria->emprendedores()->detach($emprendedor_id);
+
+    return redirect()->back()->with('success', 'Emprendedor eliminado de la feria.');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -81,4 +115,5 @@ class FeriaController extends Controller
         $feria->delete();
         return redirect()->route('ferias.index')->with('success', 'Feria eliminada.');
     }
+
 }
