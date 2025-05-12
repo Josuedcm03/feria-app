@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Feria;
 
 class FeriaController extends Controller
 {
@@ -28,7 +29,22 @@ class FeriaController extends Controller
      */
     public function store(Request $request)
     {
-        Feria::create($request->all());
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'fecha_evento' => 'required|date|after_or_equal:today',
+            'lugar' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:1000',
+        ], [
+            'nombre.required' => 'El campo Nombre es requerido.',
+            'fecha_evento.required' => 'La Fecha del evento es requerida.',
+            'fecha_evento.date' => 'La Fecha debe ser válida.',
+            'fecha_evento.after_or_equal' => 'La Fecha no puede ser anterior a hoy.',
+            'lugar.required' => 'El campo Lugar es requerido.',
+            'descripcion.required' => 'El campo Descripción es requerido.',
+        ]);
+        
+        Feria::create($validated);
+        
         return redirect()->route('ferias.index')->with('success', 'Feria registrada exitosamente.');
     }
 
