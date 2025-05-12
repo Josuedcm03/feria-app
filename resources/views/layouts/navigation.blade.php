@@ -18,13 +18,12 @@
 
                     <x-nav-link>
                         <!-- Enlace al index -->
-            <div class="mt-6">
-                <a href="{{ route('emprendedores.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    {{ __('Ver Emprendedores') }}
-                </a>
-            </div>
+                        <div class="mt-6">
+                            <a href="{{ route('emprendedores.index') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                {{ __('Ver Emprendedores') }}
+                            </a>
+                        </div>
                     </x-nav-link>
-
                 </div>
             </div>
 
@@ -53,7 +52,7 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -99,7 +98,7 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                        onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
