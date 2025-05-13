@@ -32,15 +32,30 @@ class FeriaController extends Controller
     }
 
     public function vincularEmprendedor(Request $request, Feria $feria)
-    {
+{
     $request->validate([
         'emprendedor_id' => 'required|exists:emprendedores,id'
     ]);
 
+    $fecha = $feria->fecha_evento;
+
+    $yaAsignado = Feria::whereDate('fecha_evento', $fecha)
+        ->whereHas('emprendedores', function ($query) use ($request) {
+            $query->where('emprendedor_id', $request->emprendedor_id);
+        })
+        ->where('id', '!=', $feria->id)
+        ->exists();
+
+    if ($yaAsignado) {
+        return redirect()->back()->withErrors([
+            'emprendedor_id' => 'Este emprendedor ya está asignado a otra feria en la misma fecha.'
+        ]);
+    }
+
     $feria->emprendedores()->attach($request->emprendedor_id);
 
     return redirect()->back()->with('success', 'Emprendedor asignado con éxito.');
-    }
+}
 
 public function desvincularEmprendedor(Feria $feria, $emprendedor_id)
     {

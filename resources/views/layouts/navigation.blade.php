@@ -9,22 +9,22 @@
                     <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 </a>
 
-               <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
         {{ __('Dashboard') }}
     </x-nav-link>
 
-    <x-nav-link :href="route('ferias.index')" :active="request()->routeIs('ferias.*')">
-        {{ __('Ferias') }}
-    </x-nav-link>
+<x-nav-link :href="route('ferias.index')" :active="request()->routeIs('ferias.index') || request()->routeIs('ferias.create') || request()->routeIs('ferias.edit')">
+    {{ __('Ferias') }}
+</x-nav-link>
 
     <x-nav-link :href="route('emprendedores.index')" :active="request()->routeIs('emprendedores.*')">
         {{ __('Emprendedores') }}
     </x-nav-link>
 
-    <x-nav-link :href="route('ferias.gestionar')" :active="request()->routeIs('ferias.gestionar')">
+<x-nav-link :href="route('ferias.gestionar')" :active="request()->routeIs('ferias.gestionar') || request()->routeIs('ferias.asignar')">
     {{ __('Gestionar Ferias') }}
-    </x-nav-link>
+</x-nav-link>
 </div>
 
             </div>
