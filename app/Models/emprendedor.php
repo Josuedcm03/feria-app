@@ -24,6 +24,6 @@ class Emprendedor extends Model
     // Relación con la tabla ferias
     public function ferias()
     {
-        return $this->belongsToMany(Feria::class);
+        return $this->belongsToMany(Feria::class, 'feria_emprendedor');
     }
 }
