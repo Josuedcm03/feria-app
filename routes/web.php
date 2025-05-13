@@ -29,5 +29,4 @@ Route::resource('emprendedores', EmprendedorController::class)->parameters([
     'emprendedores' => 'emprendedor',
 ]);
 
-
 require __DIR__.'/auth.php';
