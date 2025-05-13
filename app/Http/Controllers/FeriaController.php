@@ -118,9 +118,25 @@ public function desvincularEmprendedor(Feria $feria, $emprendedor_id)
      */
     public function update(Request $request, Feria $feria)
     {
-        $feria->update($request->all());
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'fecha_evento' => 'required|date|after_or_equal:today',
+            'lugar' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:1000',
+        ], [
+            'nombre.required' => 'El campo Nombre es requerido.',
+            'fecha_evento.required' => 'La Fecha del evento es requerida.',
+            'fecha_evento.date' => 'La Fecha debe ser válida.',
+            'fecha_evento.after_or_equal' => 'La Fecha no puede ser anterior a hoy.',
+            'lugar.required' => 'El campo Lugar es requerido.',
+            'descripcion.required' => 'El campo Descripción es requerido.',
+        ]);
+
+        $feria->update($validated);
+
         return redirect()->route('ferias.index')->with('success', 'Feria actualizada correctamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.
