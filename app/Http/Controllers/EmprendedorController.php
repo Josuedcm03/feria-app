@@ -22,7 +22,8 @@ class EmprendedorController extends Controller
      */
     public function create()
     {
-        return view('emprendedores.create');
+        $ferias = \App\Models\Feria::all(); // Obtiene todas las ferias
+    return view('emprendedores.create', compact('ferias'));
     }
 
     /**
@@ -30,19 +31,25 @@ class EmprendedorController extends Controller
      */
     public function store(Request $request)
     {
-         // Valida
         $validated = $request->validate([
-            'nombre'   => 'required|string|max:255',
-            'telefono' => 'required|numeric',
-            'rubro'    => 'required|string|max:255',
-        ]);
+        'nombre'   => 'required|string|max:255',
+        'telefono' => 'required|numeric',
+        'rubro'    => 'required|string|max:255',
+        'ferias'   => 'array', // Validar que sea un array
+        'ferias.*' => 'exists:ferias,id', // Validar que los IDs existan en la tabla ferias
+    ]);
 
-        // Crea 
-        Emprendedor::create($validated);
+    // Crear el emprendedor
+    $emprendedor = Emprendedor::create($validated);
 
-        return redirect()
-            ->route('emprendedores.index')
-            ->with('success', 'Emprendedor creado exitosamente.');
+    // Vincular las ferias seleccionadas
+    if (!empty($validated['ferias'])) {
+        $emprendedor->ferias()->attach($validated['ferias']);
+    }
+
+    return redirect()
+        ->route('emprendedores.index')
+        ->with('success', 'Emprendedor creado exitosamente.');
     }
 
     /**
