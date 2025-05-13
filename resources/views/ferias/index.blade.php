@@ -10,6 +10,15 @@
         </div>
     </x-slot>
 
+    @if (session('success'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2000)" x-show="show" x-transition class="max-w-7xl mx-auto mt-4 px-4">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Listo!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <thead>
@@ -52,13 +61,15 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                             {{ $feria->descripcion }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
-                            <a href="{{ route('ferias.edit', $feria->id) }}" class="text-blue-500 hover:underline">Editar</a>
-                            <form action="{{ route('ferias.destroy', $feria->id) }}" method="POST" class="inline-block ml-2">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:underline">Eliminar</button>
-                            </form>
+                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
+                                <a href="{{ route('ferias.edit', $feria->id) }}" class="text-blue-500 hover:underline">Editar</a>
+                                
+                               <form action="{{ route('ferias.destroy', $feria->id) }}" method="POST" class="inline-block ml-2"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta feria?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:underline">Eliminar</button>
+                                </form>
                         </td>
                     </tr>
                 @empty
