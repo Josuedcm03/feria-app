@@ -33,11 +33,16 @@
                                         <span class="ml-2 text-gray-700 dark:text-gray-300">{{ $feria->nombre }} ({{ $feria->fecha_evento }})</span>
                                     </label>
                                 </div>
+                                
                             @endforeach
                         </div>
+                        @error('ferias')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Crear</button>
+                    <div class="flex items-center justify-end">
+                        <a href="{{ route('emprendedores.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-sm hover:bg-gray-600">Cancelar</a>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 ml-4">Crear</button>
                     </div>
                 </form>
             </div>

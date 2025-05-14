@@ -19,7 +19,9 @@ class FeriaController extends Controller
 
     public function gestionar()
     {
-    $ferias = Feria::with('emprendedores')->get(); // eager loading
+    $ferias = Feria::with('emprendedores')
+        ->orderBy('fecha_evento', 'asc') 
+        ->get();
     return view('ferias.gestionar', compact('ferias'));
     }
 

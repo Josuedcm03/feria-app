@@ -52,10 +52,9 @@
                         @enderror
                     </div>
 
-                    <div class="flex justify-end">
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Crear Feria
-                        </button>
+                    <div class="flex items-center justify-end">
+                        <a href="{{ route('ferias.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-sm hover:bg-gray-600">Cancelar</a>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 ml-4">Crear</button>
                     </div>
                 </form>
             </div>

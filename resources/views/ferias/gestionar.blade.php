@@ -7,7 +7,7 @@
 
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
         @foreach ($ferias as $feria)
-            <div class="bg-white dark:bg-gray-800 p-6 mb-6 rounded shadow">
+            <div class="bg-white dark:bg-gray-800 p-6 mb-6 rounded shadow transition duration-300 transform hover:scale-105 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $feria->nombre }}</h3>
@@ -16,7 +16,7 @@
                         </p>
                     </div>
                     <a href="{{ route('ferias.asignar', $feria->id) }}"
-                       class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                       class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                         Añadir participantes
                     </a>
                 </div>

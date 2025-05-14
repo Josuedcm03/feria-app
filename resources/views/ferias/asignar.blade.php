@@ -9,8 +9,10 @@
         {{-- Asignar Emprendedor --}}
         <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-md">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Asignar nuevo emprendedor</h3>
-            <form action="{{ route('ferias.vincular', $feria) }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+<form action="{{ route('ferias.vincular', $feria) }}" method="POST" class="flex flex-col gap-4">
     @csrf
+
+    {{-- Select --}}
     <div class="w-full sm:w-auto">
         <select name="emprendedor_id" class="w-full rounded-md border-gray-300 dark:bg-gray-700 dark:text-white">
             @foreach ($todos as $emprendedor)
@@ -24,16 +26,19 @@
         @enderror
     </div>
 
-    <div class="flex items-center gap-4">
+    {{-- Botones debajo --}}
+    <div class="flex justify-between items-center gap-4">
+        <a href="{{ route('ferias.gestionar') }}"
+           class=" px-4 py-2 bg-gray-500 text-white rounded-md shadow-sm hover:bg-gray-600">
+          
+           Volver atrás
+        </a>
         <button class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
             Asignar
         </button>
-        <a href="{{ route('ferias.gestionar') }}"
-           class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 underline text-sm">
-           Cancelar
-        </a>
     </div>
 </form>
+
 
         </div>
 

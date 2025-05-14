@@ -29,15 +29,31 @@ class EmprendedorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
+public function store(Request $request)
+{
+    $validated = $request->validate([
         'nombre'   => 'required|string|max:255',
         'telefono' => 'required|numeric',
         'rubro'    => 'required|string|max:255',
-        'ferias'   => 'array', // Validar que sea un array
-        'ferias.*' => 'exists:ferias,id', // Validar que los IDs existan en la tabla ferias
+        'ferias'   => 'array',
+        'ferias.*' => 'exists:ferias,id',
     ]);
+
+    // Verificar si hay ferias seleccionadas con fechas repetidas
+    if ($request->filled('ferias')) {
+        $feriasSeleccionadas = \App\Models\Feria::whereIn('id', $request->ferias)->get();
+        $fechas = [];
+
+        foreach ($feriasSeleccionadas as $feria) {
+            $fecha = $feria->fecha_evento;
+            if (in_array($fecha, $fechas)) {
+                return back()->withErrors([
+                    'ferias' => 'No puedes seleccionar ferias que se celebren el mismo día.'
+                ])->withInput();
+            }
+            $fechas[] = $fecha;
+        }
+    }
 
     // Crear el emprendedor
     $emprendedor = Emprendedor::create($validated);
